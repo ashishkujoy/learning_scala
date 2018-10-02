@@ -71,11 +71,27 @@ object RNG {
     }
   }
 
-  def flatMap[A, B](rand: Rand[A])(f: A => Rand[B]): Rand[B] = {
-    rng => {
-      val (a,rng1) = rand(rng)
-      val (b,rng2) = f(a)(rng1)
-      (b,rng2)
+
+}
+
+case class State[S, +A](run: S => (A, S))
+
+object State {
+  import RNG._
+  def flatMap[A, B](rand: Rand[A])(f: A => Rand[B]): State[RNG, B] = {
+    val rngToTuple: Rand[B] = rng => {
+      val (a, rng1) = rand(rng)
+      val (b, rng2) = f(a)(rng1)
+      (b, rng2)
     }
+    State(rngToTuple)
+  }
+
+  def _map[S, A, B](rand: Rand[A])(f: A => B): State[RNG, B] = {
+    flatMap(rand)(a => unit(f(a)))
+  }
+
+  def _map2[A, B, C](randA: Rand[A], randB: Rand[B])(f: (A, B) => C): State[RNG, C] = {
+    flatMap(randA)(a => map(randB)(b => f(a, b)))
   }
 }

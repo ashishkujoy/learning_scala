@@ -44,25 +44,26 @@ class RNGTest extends FunSuite with Matchers {
 
     val actualRand = RNG.map(stringRand)(stringToIntTransformer)
 
-    actualRand shouldBe a[Rand[Int]]
+    actualRand.isInstanceOf[Rand[Int]] shouldBe true
   }
 
   test("should convert list of Rand to a Rand of list") {
     def stringRand2 = RNG.unit("String2")
-    val rands = List(stringRand,stringRand2)
+
+    val rands = List(stringRand, stringRand2)
 
     val randOfList = RNG.sequence(rands)
-    randOfList shouldBe a[Rand[List[String]]]
+    randOfList.isInstanceOf[Rand[List[String]]] shouldBe true
   }
 
   test("should flatten the result of function returning a Rand[B]") {
-    def stringToIntRand(s:String): Rand[Int] = {
+    def stringToIntRand(s: String): Rand[Int] = {
       val size = s.length
       RNG.unit(size)
     }
 
-    val intRand = RNG.flatMap(stringRand)(stringToIntRand)
+    val intRand = State.flatMap(stringRand)(stringToIntRand)
 
-    intRand shouldBe a[Rand[Int]]
+    intRand.run.isInstanceOf[Rand[Int]] shouldBe true
   }
 }
