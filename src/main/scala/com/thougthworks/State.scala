@@ -36,10 +36,46 @@ object RNG {
         go(count - 1, int :: ints, rng2)
       }
     }
+
     go(count, List.empty, rng)
   }
 
-  type Rand[A] = RNG => (A,RNG)
+  type Rand[A] = RNG => (A, RNG)
 
-  val int:Rand[Int] = _.nextInt
+  val int: Rand[Int] = _.nextInt
+
+  def unit[A](a: A): Rand[A] = rng => (a, rng)
+
+  def map[A, B](stringRand: Rand[A])(f: A => B): Rand[B] = {
+    rng => {
+      val (a, rng1) = stringRand(rng)
+      (f(a), rng1)
+    }
+  }
+
+  def _double(rng: RNG): (Double, RNG) = {
+    map(nonNegativeInt) { a => a.toDouble / (a.toDouble + 1) }(rng)
+  }
+
+  def map2[A, B, C](ar: Rand[A], br: Rand[B])(f: (A, B) => C): Rand[C] = {
+    rng => {
+      val (a, rng1) = ar(rng)
+      val (b, rng2) = br(rng1)
+      (f(a, b), rng2)
+    }
+  }
+
+  def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
+    fs.foldRight[Rand[List[A]]](unit(List.empty)) { (rand, rands) =>
+      map2(rand, rands)(_ :: _)
+    }
+  }
+
+  def flatMap[A, B](rand: Rand[A])(f: A => Rand[B]): Rand[B] = {
+    rng => {
+      val (a,rng1) = rand(rng)
+      val (b,rng2) = f(a)(rng1)
+      (b,rng2)
+    }
+  }
 }
