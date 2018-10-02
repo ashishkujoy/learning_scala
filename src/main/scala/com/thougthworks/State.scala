@@ -77,7 +77,9 @@ object RNG {
 case class State[S, +A](run: S => (A, S))
 
 object State {
+
   import RNG._
+
   def flatMap[A, B](rand: Rand[A])(f: A => Rand[B]): State[RNG, B] = {
     val rngToTuple: Rand[B] = rng => {
       val (a, rng1) = rand(rng)
@@ -93,5 +95,31 @@ object State {
 
   def _map2[A, B, C](randA: Rand[A], randB: Rand[B])(f: (A, B) => C): State[RNG, C] = {
     flatMap(randA)(a => map(randB)(b => f(a, b)))
+  }
+}
+
+
+sealed trait Input
+
+case object Coin extends Input
+
+case object Turn extends Input
+
+case class Machine(locked: Boolean, candies: Int, coins: Int) {
+  def update(input: Input): Machine = if (candies > 0) {
+    input match {
+      case Coin => if (locked) Machine(false, candies, coins + 1) else this
+      case Turn => if (!locked) Machine(true, candies - 1, coins) else this
+    }
+  } else this
+}
+
+object Machine {
+  def simulate(inputs: List[Input]): State[Machine, Int] = {
+    val machineToTuple: Machine => (Int, Machine) = (machine: Machine) => {
+      val newMachineState = inputs.foldLeft(machine)((machine, input) => machine.update(input))
+      (newMachineState.coins, newMachineState)
+    }
+    State(machineToTuple)
   }
 }
