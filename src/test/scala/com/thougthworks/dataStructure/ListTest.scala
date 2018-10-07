@@ -78,8 +78,18 @@ class ListTest extends FunSuite with Matchers {
     actualList shouldBe List.empty
   }
 
-  test("should give empty list when calling drop on Nil") {
+  test("should give empty list when calling drop on emptyList") {
     List.empty.drop(21) shouldBe List.empty
   }
 
+  test("should drop elements of list till then continue satisfying given condition") {
+    val intergers = List(1, 2, 3, 4, 5, 6, 7)
+    val expectedRemainingIntegers = List(5, 6, 7)
+
+    intergers.dropWhile(_ < 5) shouldBe expectedRemainingIntegers
+  }
+
+  test("should give empty list when calling dropWhile on empty list") {
+    List.empty[Int].dropWhile(_ != 100) shouldBe List.empty
+  }
 }
