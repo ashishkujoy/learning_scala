@@ -1,6 +1,6 @@
 inThisBuild(List(
   organization := "com.thoughtworks",
-  scalaVersion := "2.12.7",
+  scalaVersion := "2.11.8",
   version := "0.1.0-SNAPSHOT",
   transitiveClassifiers in Global := Seq(Artifact.SourceClassifier)
 ))
