@@ -1,10 +1,38 @@
 package com.thougthworks.dataStructure
 
-sealed trait List[+A]
+sealed trait List[+A] {
+  def drop(n: Int): List[A]
 
-case object Nil extends List[Nothing]
+  def tail: List[A]
+}
 
-case class Cons[+A](head: A, tail: List[A]) extends List[A]
+case object Nil extends List[Nothing] {
+
+  override def tail: List[Nothing] = throwException("tail of empty list")
+
+  override def drop(n: Int): List[Nothing] = this
+
+  private def throwException(message: String) = {
+    throw new UnsupportedOperationException(message)
+  }
+}
+
+case class Cons[+A](h: A, t: List[A]) extends List[A] {
+  override def tail: List[A] = t
+
+  override def drop(n: Int): List[A] = {
+    def go(cons: List[A], n: Int): List[A] = {
+      if (n > 0) {
+        cons match {
+          case Cons(_, rt) => go(rt, n - 1)
+          case Nil => Nil
+        }
+      } else cons
+    }
+
+    go(this, n)
+  }
+}
 
 object List {
 
@@ -27,10 +55,13 @@ object List {
     */
   }
 
+  def empty[A]: List[A] = Nil
+
   def sum(ints: List[Int], acc: Int = 0): Int = {
     ints match {
       case Nil => acc
       case Cons(h, t) => sum(t, acc + h)
     }
   }
+
 }

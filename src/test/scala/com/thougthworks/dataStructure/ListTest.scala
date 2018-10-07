@@ -2,6 +2,8 @@ package com.thougthworks.dataStructure
 
 import org.scalatest.{FunSuite, Matchers}
 
+import scala.util.Try
+
 class ListTest extends FunSuite with Matchers {
 
   test("should give nil when for no arguments to apply") {
@@ -35,4 +37,49 @@ class ListTest extends FunSuite with Matchers {
 
     List.sum(integers) shouldBe 10
   }
+
+  test("should give tail of a list") {
+    val list = List(1, 2, 3)
+    val expectedTail = Cons(2, Cons(3, Nil))
+    val actualTail = list.tail
+
+    actualTail shouldBe expectedTail
+  }
+
+  test("should throw UnsupportedOperationException for tail of empty list") {
+    val triedTail = Try(List().tail)
+
+    triedTail.isFailure shouldBe true
+
+    val exception = triedTail.toEither.left.get
+
+    exception.isInstanceOf[UnsupportedOperationException] shouldBe true
+  }
+
+  test("should drop n element of list") {
+    val list = List(1, 2, 3)
+    val expectedList = Cons(3, Nil)
+    val actualList = list.drop(2)
+
+    actualList shouldBe expectedList
+  }
+
+  test("should empty list when elements to drop is equal to size of list") {
+    val list = List(1, 2, 3)
+    val actualList = list.drop(3)
+
+    actualList shouldBe List.empty
+  }
+
+  test("should empty list when elements to drop is greater than size of list") {
+    val list = List(1, 2, 3)
+    val actualList = list.drop(20)
+
+    actualList shouldBe List.empty
+  }
+
+  test("should give empty list when calling drop on Nil") {
+    List.empty.drop(21) shouldBe List.empty
+  }
+
 }
