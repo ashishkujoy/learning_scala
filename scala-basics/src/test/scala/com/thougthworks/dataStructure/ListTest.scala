@@ -77,10 +77,10 @@ class ListTest extends FunSuite with Matchers {
   }
 
   test("should drop elements of list till then continue satisfying given condition") {
-    val intergers                 = List(1, 2, 3, 4, 5, 6, 7)
+    val integers                  = List(1, 2, 3, 4, 5, 6, 7)
     val expectedRemainingIntegers = List(5, 6, 7)
 
-    intergers.dropWhile(_ < 5) shouldBe expectedRemainingIntegers
+    integers.dropWhile(_ < 5) shouldBe expectedRemainingIntegers
   }
 
   test("should give empty list when calling dropWhile on empty list") {
