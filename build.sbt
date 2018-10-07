@@ -1,11 +1,16 @@
-name := "scala"
+inThisBuild(List(
+  organization := "com.thoughtworks",
+  scalaVersion := "2.12.7",
+  version := "0.1.0-SNAPSHOT",
+  transitiveClassifiers in Global := Seq(Artifact.SourceClassifier)
+))
 
-version := "0.1"
+lazy val `scala-basics` = project
+  .settings(
+    libraryDependencies ++= Dependencies.basic
+  )
 
-scalaVersion := "2.12.7"
-
-libraryDependencies ++= Seq(
-  "org.scalatest" %% "scalatest" % "3.0.5" % "test"
-)
-
-suppressSbtShellNotification := true
+lazy val `spark-basics` = project
+  .settings(
+    libraryDependencies ++= Dependencies.sparkBasics
+  )
