@@ -14,3 +14,9 @@ lazy val `spark-basics` = project
   .settings(
     libraryDependencies ++= Dependencies.sparkBasics
   )
+
+
+lazy val `streams-basics` = project
+  .settings(
+    libraryDependencies ++= Dependencies.streamBasics
+  )

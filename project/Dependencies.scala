@@ -8,10 +8,18 @@ object Dependencies {
     Spark.`ml-lib`,
     Spark.`streaming`
   )
+  private val streams = Seq(
+    Akka.`akka-stream`,
+    Akka.`akka-actor-typed`,
+    Akka.`play-json`,
+    Akka.`akka-http`
+  )
 
   val basic = Seq(
     Libs.`scala-test`
   )
+
+  val streamBasics: Seq[ModuleID] = basic ++ streams
 
   val sparkBasics: Seq[ModuleID] = basic ++ spark
 
