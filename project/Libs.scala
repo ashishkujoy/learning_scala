@@ -22,7 +22,8 @@ object Akka {
   val Org                = "com.typesafe.akka"
   val `akka-stream`      = Org %% "akka-stream" % Version
   val `akka-actor-typed` = Org %% "akka-actor-typed" % Version
+  val `akka-actor`       = Org %% "akka-actor" % Version
   val `akka-http`        = Org %% "akka-http" % "10.1.5"
+  val `akka-test-kit`    = Org %% "akka-testkit" % Version % Test
   val `play-json`        = "com.typesafe.play" %% "play-json" % "2.6.10"
-
 }
