@@ -1,13 +1,11 @@
 package com.thoughtworks.streams.playground
 
 import akka.NotUsed
-import akka.actor.Actor
+import akka.stream.ClosedShape
 import akka.stream.scaladsl.{Flow, GraphDSL, Keep, RunnableGraph, Sink, Source}
-import akka.stream.{ActorMaterializer, ClosedShape}
 import com.thoughtworks.streams.GlobalVariables._
 
 import scala.concurrent.Future
-import scala.util.{Failure, Success}
 
 object Application {
   private val source: Source[Int, NotUsed]              = Source(1 to 100)
@@ -25,22 +23,6 @@ object Application {
       src ~> f ~> dst
       ClosedShape
     })
-
-  final class RunWithMyself extends Actor {
-    implicit val mat: ActorMaterializer = ActorMaterializer()
-    println("running")
-
-    Source.maybe
-      .runWith(Sink.onComplete {
-        case Success(done) ⇒ println(s"Completed: $done")
-        case Failure(ex)   ⇒ println(s"Failed: ${ex.getMessage}")
-      })
-
-    def receive: PartialFunction[Any, Unit] = {
-      case "boom" ⇒
-        context.stop(self) // will also terminate the stream
-    }
-  }
 
   def main(args: Array[String]): Unit = {
 //    source.runForeach(i ⇒ println(i))(materializer)
