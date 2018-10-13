@@ -8,15 +8,15 @@ inThisBuild(List(
 lazy val `scala-basics` = project
   .settings(
     libraryDependencies ++= Dependencies.basic
-  )
+  ).enablePlugins(Coverage)
 
 lazy val `spark-basics` = project
   .settings(
     libraryDependencies ++= Dependencies.sparkBasics
-  )
+  ).enablePlugins(Coverage)
 
 
 lazy val `streams-basics` = project
   .settings(
     libraryDependencies ++= Dependencies.streamBasics
-  )
+  ).enablePlugins(Coverage)

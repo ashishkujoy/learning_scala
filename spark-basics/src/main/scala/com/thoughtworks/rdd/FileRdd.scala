@@ -7,7 +7,9 @@ class FileRdd(rdd: RDD[String]) {
 
   def lineCounts: Long = rdd.count()
 
-  def wordCounts: Long = words.count()
+  def wordCounts: Long = {
+    words.map(_.length).reduce(_ + _)
+  }
 
   private def words: RDD[Array[String]] = {
     rdd.map(l => l.split(" ").filter(w => w.trim.nonEmpty)).cache()

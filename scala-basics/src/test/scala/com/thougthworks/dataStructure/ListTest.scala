@@ -50,6 +50,17 @@ class ListTest extends FunSuite with Matchers {
     }
   }
 
+  test("should give head of a list") {
+    val list = List(1, 2, 3)
+    list.head shouldBe 1
+  }
+
+  test("should throw UnsupportedOperationException for head of empty list") {
+    intercept[UnsupportedOperationException] {
+      List.empty.head
+    }
+  }
+
   test("should drop n element of list") {
     val list         = List(1, 2, 3)
     val expectedList = Cons(3, Nil)
@@ -111,11 +122,11 @@ class ListTest extends FunSuite with Matchers {
 
   test("should give sum of length of all words in given list") {
     val words = List("hello", "scala", "is", "fun")
-    words.foldLeft(0)(_ + _.size) shouldBe 15
+    words.foldLeft(0)((a, b) => a + b.length) shouldBe 15
   }
 
   test("should give initial value for foldLeft on empty list") {
-    List.empty[String].foldLeft(0)(_ + _.size) shouldBe 0
+    List.empty[String].foldLeft(0)((a, b) => a + b.length) shouldBe 0
   }
 
   test("should give reverse of a given list") {
