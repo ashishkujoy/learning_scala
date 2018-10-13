@@ -1,6 +1,7 @@
 package com.thoughtworks.streams.actors
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.{ActorRef, ActorSystem, PoisonPill}
 import akka.testkit.{TestKit, TestProbe}
+import com.thoughtworks.streams.actors.DeviceGroup.{ReplyDeviceList, RequestDeviceList}
 import com.thoughtworks.streams.actors.DeviceManager.{DeviceRegistered, RequestTrackDevice}
 import org.scalatest._
 
@@ -29,7 +30,7 @@ class DeviceGroupTest(_system: ActorSystem)
   }
 
   "Device Group" should {
-    "reply with registration acknowledgement for correct " + groupId in {
+    "reply with registration acknowledgement for correct groupId" in {
       deviceGroup.tell(RequestTrackDevice(groupId, deviceId), probe.ref)
       probe.expectMsg(DeviceRegistered)
     }
@@ -57,10 +58,41 @@ class DeviceGroupTest(_system: ActorSystem)
       device1 shouldBe device2
     }
 
-    "not reply with registration acknowledgement for incorrect " + groupId in {
+    "not reply with registration acknowledgement for incorrect groupId" in {
       val unKnownGroupId = "unKnownGroup"
       deviceGroup.tell(RequestTrackDevice(unKnownGroupId, deviceId), probe.ref)
       probe.expectNoMessage(500.millisecond)
     }
+
+    "list down all active device actors" in {
+      deviceGroup.tell(RequestTrackDevice("group", "device1"), probe.ref)
+      probe.expectMsg(DeviceManager.DeviceRegistered)
+
+      deviceGroup.tell(RequestTrackDevice("group", "device2"), probe.ref)
+      probe.expectMsg(DeviceManager.DeviceRegistered)
+
+      deviceGroup.tell(RequestDeviceList(requestId = 0), probe.ref)
+      probe.expectMsg(DeviceGroup.ReplyDeviceList(requestId = 0, Set("device1", "device2")))
+    }
+
+    "list down all active device actors after one actor has been shutdown" in {
+      deviceGroup.tell(RequestTrackDevice(groupId, "device1"), probe.ref)
+      probe.expectMsg(DeviceManager.DeviceRegistered)
+      val toShutDown = probe.lastSender
+
+      deviceGroup.tell(RequestTrackDevice(groupId, "device2"), probe.ref)
+      probe.expectMsg(DeviceManager.DeviceRegistered)
+
+      deviceGroup.tell(RequestDeviceList(requestId = 0), probe.ref)
+      probe.expectMsg(ReplyDeviceList(requestId = 0, Set("device1", "device2")))
+
+      probe.watch(toShutDown)
+      toShutDown ! PoisonPill
+      probe.expectTerminated(toShutDown)
+
+      deviceGroup.tell(RequestDeviceList(requestId = 12), probe.ref)
+      probe.expectMsg(ReplyDeviceList(requestId = 12, Set("device2")))
+    }
+
   }
 }
