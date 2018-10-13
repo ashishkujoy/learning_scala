@@ -1,6 +1,7 @@
 package com.thoughtworks.streams.actors
 
 import akka.actor.{Actor, Props}
+import com.thoughtworks.streams.actors.DeviceManager.RequestTrackDevice
 
 object Device {
   def props(groupId: String, deviceId: String): Props = Props(new Device(groupId, deviceId))
@@ -24,6 +25,11 @@ class Device(groupId: String, deviceId: String) extends Actor {
 
     case ReadTemperature(id) ⇒
       sender() ! RespondTemperature(id, lastTemperatureReading)
+
+    case RequestTrackDevice(`groupId`, `deviceId`) =>
+      sender() ! DeviceManager.DeviceRegistered
+
+    case RequestTrackDevice(unKnownGroupId, unKnownDeviceId) =>
   }
 
 }

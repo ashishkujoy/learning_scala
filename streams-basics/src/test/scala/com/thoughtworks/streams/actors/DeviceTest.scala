@@ -2,7 +2,10 @@ package com.thoughtworks.streams.actors
 import akka.actor.{ActorRef, ActorSystem}
 import akka.testkit.{TestKit, TestProbe}
 import com.thoughtworks.streams.actors.Device.{ReadTemperature, RecordTemperature, RespondTemperature, TemperatureRecorded}
+import com.thoughtworks.streams.actors.DeviceManager.{DeviceRegistered, RequestTrackDevice}
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpecLike}
+
+import scala.concurrent.duration._
 
 class DeviceTest(_system: ActorSystem)
     extends TestKit(_system)
@@ -59,6 +62,26 @@ class DeviceTest(_system: ActorSystem)
       val response2 = probe.expectMsgType[RespondTemperature]
       response2.requestId shouldBe 4
       response2.value shouldBe Some(55.0)
+    }
+
+    "reply with device registered" in {
+      deviceActor.tell(RequestTrackDevice("group", "device"), probe.ref)
+      probe.expectMsg(DeviceRegistered)
+    }
+
+    "not reply when group name is unknown" in {
+      deviceActor.tell(RequestTrackDevice("unknownGroup", "device"), probe.ref)
+      probe.expectNoMessage(500.milliseconds)
+    }
+
+    "not reply when device name is unknown" in {
+      deviceActor.tell(RequestTrackDevice("group", "unknownDevice"), probe.ref)
+      probe.expectNoMessage(500.milliseconds)
+    }
+
+    "not reply when both group and device name are unknown" in {
+      deviceActor.tell(RequestTrackDevice("unknownGroup", "unknownDevice"), probe.ref)
+      probe.expectNoMessage(500.milliseconds)
     }
   }
 }
