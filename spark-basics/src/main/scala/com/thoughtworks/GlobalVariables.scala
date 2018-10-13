@@ -14,4 +14,6 @@ object GlobalVariables {
     .getOrCreate()
 
   val sc: SparkContext = sparkSession.sparkContext
+
+  sc.setLogLevel("ERROR")
 }
