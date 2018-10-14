@@ -2,7 +2,8 @@ package com.thoughtworks.streams.actors
 import akka.actor.{Actor, ActorRef, Props, Terminated}
 import com.thoughtworks.streams.actors.DeviceGroup.{ReplyDeviceList, RequestDeviceList}
 import com.thoughtworks.streams.actors.DeviceManager.RequestTrackDevice
-import com.thoughtworks.streams.actors.ImplicitConverters._
+import com.thougthworks.ImplicitConverters._
+
 
 object DeviceGroup {
   def props(groupId: String): Props = Props(new DeviceGroup(groupId))

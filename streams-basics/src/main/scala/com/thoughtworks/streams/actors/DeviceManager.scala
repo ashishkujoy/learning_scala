@@ -1,7 +1,7 @@
 package com.thoughtworks.streams.actors
 import akka.actor.{Actor, ActorRef, Props, Terminated}
 import com.thoughtworks.streams.actors.DeviceManager.{ReplyGroupList, RequestGroupList, RequestTrackDevice}
-import com.thoughtworks.streams.actors.ImplicitConverters._
+import com.thougthworks.ImplicitConverters._
 
 object DeviceManager {
   final case class RequestTrackDevice(groupId: String, deviceId: String)
@@ -35,8 +35,8 @@ class DeviceManager extends Actor {
       case Some(ref) => ref forward trackMsg
       case None      => createNewGroup(groupId) forward trackMsg
     }
-
   }
+
   private def createNewGroup(groupId: String): ActorRef = {
     val groupActor = context.actorOf(DeviceGroup.props(groupId), "group-" + groupId)
     context.watch(groupActor)

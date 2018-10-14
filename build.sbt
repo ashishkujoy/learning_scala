@@ -13,10 +13,10 @@ lazy val `scala-basics` = project
 lazy val `spark-basics` = project
   .settings(
     libraryDependencies ++= Dependencies.sparkBasics
-  ).enablePlugins(Coverage)
+  ).dependsOn(`scala-basics`).enablePlugins(Coverage)
 
 
 lazy val `streams-basics` = project
   .settings(
     libraryDependencies ++= Dependencies.streamBasics
-  ).enablePlugins(Coverage)
+  ).dependsOn(`scala-basics`).enablePlugins(Coverage)

@@ -1,6 +1,7 @@
-package com.thoughtworks.streams.actors
-import com.thoughtworks.streams.actors.ImplicitConverters._
+package com.thougthworks
+
 import org.scalatest.{Matchers, WordSpec}
+import ImplicitConverters._
 
 class ImplicitConvertersTest extends WordSpec with Matchers {
   "MyMap" should {
@@ -11,6 +12,15 @@ class ImplicitConvertersTest extends WordSpec with Matchers {
 
     "return none if given value is not present" in {
       keyVals.findKeyByValue('d') shouldBe None
+    }
+
+    "return a map with key as value of input map and value as key of input map" in {
+      keyVals.swap shouldBe Map('a' -> 1, 'b' -> 2)
+    }
+
+    "return a empty map when input map is empty" in {
+      val emptyMap = Map[Int, Int]()
+      emptyMap.swap shouldBe Map.empty
     }
   }
 }
