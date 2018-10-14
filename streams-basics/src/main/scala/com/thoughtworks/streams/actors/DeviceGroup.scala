@@ -1,9 +1,10 @@
 package com.thoughtworks.streams.actors
 import akka.actor.{Actor, ActorRef, Props, Terminated}
-import com.thoughtworks.streams.actors.DeviceGroup.{ReplyDeviceList, RequestDeviceList}
+import com.thoughtworks.streams.actors.DeviceGroup.{ReplyDeviceList, RequestAllTemperatures, RequestDeviceList}
 import com.thoughtworks.streams.actors.DeviceManager.RequestTrackDevice
 import com.thougthworks.ImplicitConverters._
 
+import scala.concurrent.duration._
 
 object DeviceGroup {
   def props(groupId: String): Props = Props(new DeviceGroup(groupId))
@@ -29,8 +30,19 @@ class DeviceGroup(groupId: String) extends Actor {
     case RequestTrackDevice(unKnownGroupId, deviceId) =>
     case Terminated(deviceActor)                      => removeDeadActor(deviceActor)
     case RequestDeviceList(requestId)                 => sender() ! ReplyDeviceList(requestId, deviceIdToActor.keys.toSet)
+    case RequestAllTemperatures(requestId)            => queryAllDeviceActors(requestId)
   }
 
+  private def queryAllDeviceActors(requestId: Long): ActorRef = {
+    context.actorOf(
+      DeviceGroupQuery.props(
+        actorToDeviceId = deviceIdToActor.swap,
+        requestId = requestId,
+        requester = sender(),
+        3.seconds
+      )
+    )
+  }
   private def handleValidTrackDeviceRequest(trackMsg: RequestTrackDevice): Unit = {
     deviceIdToActor.get(trackMsg.deviceId) match {
       case Some(deviceActor) => deviceActor forward trackMsg
