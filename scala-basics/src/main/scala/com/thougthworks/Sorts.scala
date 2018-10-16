@@ -1,9 +1,9 @@
 package com.thougthworks
 
 object Sorts {
-  def quickSort(ints: Seq[Int])(implicit comparator: (Int, Int) => Boolean): Seq[Int] = {
+  def quickSort[A](ints: Seq[A])(implicit comparator: (A, A) => Boolean): Seq[A] = {
 
-    def go(base: Int, left: Seq[Int], right: Seq[Int], remaining: Seq[Int]): Seq[Int] = {
+    def go(base: A, left: Seq[A], right: Seq[A], remaining: Seq[A]): Seq[A] = {
       remaining match {
         case Nil => (left :+ base) ++ right
         case _ =>
