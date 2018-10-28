@@ -16,7 +16,7 @@ object Device {
 class Device(groupId: String, deviceId: String) extends Actor {
   import Device._
 
-  var lastTemperatureReading: Option[Double] = None
+  private var lastTemperatureReading: Option[Double] = None
 
   override def receive: Receive = {
     case RecordTemperature(id, value) ⇒

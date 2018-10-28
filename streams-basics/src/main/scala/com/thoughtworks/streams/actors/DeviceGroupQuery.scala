@@ -22,7 +22,7 @@ class DeviceGroupQuery(actorToDeviceId: Map[ActorRef, String], requestId: Long, 
     extends Actor {
   import DeviceGroupQuery._
   import context.dispatcher
-  val queryTimeoutTimer: Cancellable = context.system.scheduler.scheduleOnce(timeout, self, CollectionTimeout)
+  private val queryTimeoutTimer: Cancellable = context.system.scheduler.scheduleOnce(timeout, self, CollectionTimeout)
 
   override def preStart(): Unit = {
     actorToDeviceId.keysIterator.foreach { deviceActor =>
