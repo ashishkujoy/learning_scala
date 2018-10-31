@@ -33,4 +33,5 @@ lazy val `macro-tests` = project
     libraryDependencies ++= Dependencies.basic
   )
   .dependsOn(`scala-basics`)
+  .dependsOn(`scala-basics` % "test -> test")
   .enablePlugins(Coverage)
