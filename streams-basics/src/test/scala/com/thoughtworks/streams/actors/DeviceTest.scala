@@ -1,18 +1,12 @@
 package com.thoughtworks.streams.actors
 import akka.actor.{ActorRef, ActorSystem}
-import akka.testkit.{TestKit, TestProbe}
+import akka.testkit.TestProbe
 import com.thoughtworks.streams.actors.Device.{ReadTemperature, RecordTemperature, RespondTemperature, TemperatureRecorded}
 import com.thoughtworks.streams.actors.DeviceManager.{DeviceRegistered, RequestTrackDevice}
-import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpecLike}
 
 import scala.concurrent.duration._
 
-class DeviceTest(_system: ActorSystem)
-    extends TestKit(_system)
-    with Matchers
-    with WordSpecLike
-    with BeforeAndAfterAll
-    with BeforeAndAfterEach {
+class DeviceTest(_system: ActorSystem) extends ActorsTest(_system) {
 
   def this() = this(ActorSystem("DeviceTest"))
 

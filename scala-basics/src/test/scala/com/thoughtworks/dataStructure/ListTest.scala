@@ -1,8 +1,8 @@
 package com.thoughtworks.dataStructure
 
-import org.scalatest.{FunSuite, Matchers}
+import com.thoughtworks.BaseTest
 
-class ListTest extends FunSuite with Matchers {
+class ListTest extends BaseTest {
 
   test("should give nil when for no arguments to apply") {
     val actualList = List.apply()

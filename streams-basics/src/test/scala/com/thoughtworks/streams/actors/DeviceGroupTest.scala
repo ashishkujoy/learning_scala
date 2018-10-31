@@ -1,18 +1,12 @@
 package com.thoughtworks.streams.actors
 import akka.actor.{ActorRef, ActorSystem, PoisonPill}
-import akka.testkit.{TestKit, TestProbe}
+import akka.testkit.TestProbe
 import com.thoughtworks.streams.actors.DeviceGroup._
 import com.thoughtworks.streams.actors.DeviceManager.{DeviceRegistered, RequestTrackDevice}
-import org.scalatest._
 
 import scala.concurrent.duration._
 
-class DeviceGroupTest(_system: ActorSystem)
-    extends TestKit(_system)
-    with Matchers
-    with WordSpecLike
-    with BeforeAndAfterAll
-    with BeforeAndAfterEach {
+class DeviceGroupTest(_system: ActorSystem) extends ActorsTest(_system) {
 
   private val groupId   = "group"
   private val deviceId  = "device"

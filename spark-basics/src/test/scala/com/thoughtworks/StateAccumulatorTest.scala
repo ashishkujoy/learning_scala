@@ -1,7 +1,6 @@
 package com.thoughtworks
-import org.scalatest.{BeforeAndAfterEach, FunSuite, Matchers}
 
-class StateAccumulatorTest extends FunSuite with Matchers with BeforeAndAfterEach {
+class StateAccumulatorTest extends BaseTest {
   private var accumulator: StateAccumulator = _
 
   override protected def beforeEach(): Unit = {

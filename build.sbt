@@ -18,6 +18,7 @@ lazy val `spark-basics` = project
     libraryDependencies ++= Dependencies.sparkBasics
   )
   .dependsOn(`scala-basics`)
+  .dependsOn(`scala-basics` % "test -> test")
   .enablePlugins(Coverage)
 
 lazy val `streams-basics` = project

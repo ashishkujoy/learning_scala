@@ -1,19 +1,13 @@
 package com.thoughtworks.streams.actors
 import akka.actor.{ActorRef, ActorSystem, PoisonPill}
-import akka.testkit.{TestKit, TestProbe}
+import akka.testkit.TestProbe
 import com.thoughtworks.streams.actors.Device.{ReadTemperature, RespondTemperature}
 import com.thoughtworks.streams.actors.DeviceGroup._
 import com.thoughtworks.streams.actors.DeviceGroupQuery.CollectionTimeout
-import org.scalatest._
 
 import scala.concurrent.duration._
 
-class DeviceGroupQueryTest(_system: ActorSystem)
-    extends TestKit(_system)
-    with Matchers
-    with WordSpecLike
-    with BeforeAndAfterAll
-    with BeforeAndAfterEach {
+class DeviceGroupQueryTest(_system: ActorSystem) extends ActorsTest(_system) {
 
   def this() = this(ActorSystem("DeviceTest"))
 

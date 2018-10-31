@@ -1,15 +1,13 @@
 package com.thoughtworks
 
 import com.thoughtworks.RNG.{Rand, Simple}
-import org.scalatest.{FunSuite, Matchers}
 
-class RNGTest extends FunSuite with Matchers {
+class RNGTest extends BaseTest {
 
   private val stringRand: Rand[String] = RNG.unit("string")
 
-
   test("should give a list of positive integers of give size") {
-    val rng = Simple(1024)
+    val rng      = Simple(1024)
     val integers = RNG.ints(10)(rng)._1
 
     integers.size shouldBe 10
@@ -17,21 +15,21 @@ class RNGTest extends FunSuite with Matchers {
   }
 
   test("should give a list of empty list for size 0") {
-    val rng = Simple(1024)
+    val rng      = Simple(1024)
     val integers = RNG.ints(0)(rng)._1
 
     integers.isEmpty shouldBe true
   }
 
   test("should give a list of empty list for negative size") {
-    val rng = Simple(1024)
+    val rng      = Simple(1024)
     val integers = RNG.ints(-10)(rng)._1
 
     integers.isEmpty shouldBe true
   }
 
   test("should give generator which always returns given value") {
-    val testValue = 21
+    val testValue       = 21
     val rand: Rand[Int] = RNG.unit(testValue)
     for (i <- 1 to 100) {
       val rng = Simple(i)

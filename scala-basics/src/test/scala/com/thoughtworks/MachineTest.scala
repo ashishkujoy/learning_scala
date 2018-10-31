@@ -1,13 +1,12 @@
 package com.thoughtworks
 
 import com.thoughtworks.Machine.simulate
-import org.scalatest.{FunSuite, Matchers}
 
-class MachineTest extends FunSuite with Matchers {
+class MachineTest extends BaseTest {
 
-  private val locked = true
+  private val locked   = true
   private val unLocked = false
-  private val machine = Machine(locked, 10, 4)
+  private val machine  = Machine(locked, 10, 4)
 
   test("should not give any candy or increase coin's counts for empty input") {
     val actualState: State[Machine, Int] = simulate(List.empty)
@@ -58,7 +57,7 @@ class MachineTest extends FunSuite with Matchers {
   }
 
   test("should not increase coin's count when their is no candy in machine") {
-    val machine = Machine(locked,0,4)
+    val machine                          = Machine(locked, 0, 4)
     val actualState: State[Machine, Int] = simulate(List(Coin, Turn, Coin, Turn))
 
     val (totalCoins, machineNewState) = actualState.run(machine)

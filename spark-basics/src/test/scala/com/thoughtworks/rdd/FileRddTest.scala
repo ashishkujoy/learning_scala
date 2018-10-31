@@ -1,8 +1,8 @@
 package com.thoughtworks.rdd
 
-import org.scalatest.{FunSuite, Matchers}
+import com.thoughtworks.BaseTest
 
-class FileRddTest extends FunSuite with Matchers {
+class FileRddTest extends BaseTest {
 
   test("should give number of line in a given file") {
     val filePath = "spark-basics/src/test/resources/rdd/fileWithFourLines.txt"
