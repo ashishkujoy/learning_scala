@@ -1,4 +1,4 @@
-package com.thougthworks
+package com.thoughtworks
 
 import org.scalatest.{Matchers, WordSpec}
 import ImplicitConverters._

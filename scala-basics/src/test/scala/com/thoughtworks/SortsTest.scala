@@ -1,5 +1,5 @@
-package com.thougthworks
-import com.thougthworks.Sorts.quickSort
+package com.thoughtworks
+import com.thoughtworks.Sorts.quickSort
 import org.scalatest.{Matchers, WordSpec}
 
 class SortsTest extends WordSpec with Matchers {

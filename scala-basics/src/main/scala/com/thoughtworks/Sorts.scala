@@ -1,4 +1,4 @@
-package com.thougthworks
+package com.thoughtworks
 
 object Sorts {
   def quickSort[A](ints: Seq[A])(implicit comparator: (A, A) => Boolean): Seq[A] = {

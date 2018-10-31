@@ -2,7 +2,7 @@ package com.thoughtworks.streams.actors
 import akka.actor.{Actor, ActorRef, Props, Terminated}
 import com.thoughtworks.streams.actors.DeviceGroup.{ReplyDeviceList, RequestAllTemperatures, RequestDeviceList}
 import com.thoughtworks.streams.actors.DeviceManager.RequestTrackDevice
-import com.thougthworks.ImplicitConverters._
+import com.thoughtworks.ImplicitConverters._
 
 import scala.concurrent.duration._
 

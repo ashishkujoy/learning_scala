@@ -1,4 +1,4 @@
-package com.thougthworks
+package com.thoughtworks
 
 import scala.language.{higherKinds, implicitConversions}
 

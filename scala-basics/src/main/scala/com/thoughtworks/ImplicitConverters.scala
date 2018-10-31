@@ -1,4 +1,4 @@
-package com.thougthworks
+package com.thoughtworks
 
 object ImplicitConverters {
   implicit class MyMap[A, B](mapAtoB: Map[A, B]) {
@@ -7,5 +7,6 @@ object ImplicitConverters {
     }
 
     def swap: Map[B, A] = mapAtoB.map(kv => kv._2 -> kv._1)
+    Seq
   }
 }

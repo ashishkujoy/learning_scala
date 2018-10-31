@@ -1,22 +1,35 @@
-inThisBuild(List(
-  organization := "com.thoughtworks",
-  scalaVersion := "2.11.8",
-  version := "0.1.0-SNAPSHOT",
-  transitiveClassifiers in Global := Seq(Artifact.SourceClassifier)
-))
+inThisBuild(
+  List(
+    organization := "com.thoughtworks",
+    scalaVersion := "2.11.8",
+    version := "0.1.0-SNAPSHOT",
+    transitiveClassifiers in Global := Seq(Artifact.SourceClassifier)
+  )
+)
 
 lazy val `scala-basics` = project
   .settings(
     libraryDependencies ++= Dependencies.basic
-  ).enablePlugins(Coverage)
+  )
+  .enablePlugins(Coverage)
 
 lazy val `spark-basics` = project
   .settings(
     libraryDependencies ++= Dependencies.sparkBasics
-  ).dependsOn(`scala-basics`).enablePlugins(Coverage)
-
+  )
+  .dependsOn(`scala-basics`)
+  .enablePlugins(Coverage)
 
 lazy val `streams-basics` = project
   .settings(
     libraryDependencies ++= Dependencies.streamBasics
-  ).dependsOn(`scala-basics`).enablePlugins(Coverage)
+  )
+  .dependsOn(`scala-basics`)
+  .enablePlugins(Coverage)
+
+lazy val `macro-tests` = project
+  .settings(
+    libraryDependencies ++= Dependencies.basic
+  )
+  .dependsOn(`scala-basics`)
+  .enablePlugins(Coverage)

@@ -1,4 +1,4 @@
-package com.thougthworks.dataStructure
+package com.thoughtworks.dataStructure
 
 import org.scalatest.{FunSuite, Matchers}
 

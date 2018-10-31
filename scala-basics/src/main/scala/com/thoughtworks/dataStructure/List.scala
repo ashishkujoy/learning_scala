@@ -1,4 +1,4 @@
-package com.thougthworks.dataStructure
+package com.thoughtworks.dataStructure
 
 sealed trait List[+A] {
   def dropWhile(predicate: A => Boolean): List[A]
@@ -95,6 +95,7 @@ object List {
 
   def apply[A](vals: A*): List[A] = {
 
+    @scala.annotation.tailrec
     def go(cons: List[A], vals: A*): List[A] = {
       if (vals.isEmpty) cons
       else go(Cons(vals.head, cons), vals.tail: _*)
@@ -102,14 +103,13 @@ object List {
 
     go(Nil, vals.reverse: _*)
 
-    /* Recursive solution
-    def recursiveGo(vals: A*): List[A] = {
+//     Recursive solution
+    /*def recursiveGo(vals: A*): List[A] = {
       if (vals.isEmpty) Nil
       else Cons(vals.head, recursiveGo(vals.tail: _*))
     }
 
-    recursiveGo(vals: _*)
-   */
+    recursiveGo(vals: _*)*/
   }
 
   def empty[A]: List[A] = Nil

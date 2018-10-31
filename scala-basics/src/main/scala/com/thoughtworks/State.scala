@@ -1,4 +1,4 @@
-package com.thougthworks
+package com.thoughtworks
 
 trait RNG {
   def nextInt: (Int, RNG)

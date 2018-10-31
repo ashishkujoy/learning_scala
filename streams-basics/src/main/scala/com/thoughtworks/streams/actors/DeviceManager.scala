@@ -1,7 +1,7 @@
 package com.thoughtworks.streams.actors
 import akka.actor.{Actor, ActorRef, Props, Terminated}
 import com.thoughtworks.streams.actors.DeviceManager.{ReplyGroupList, RequestGroupList, RequestTrackDevice}
-import com.thougthworks.ImplicitConverters._
+import com.thoughtworks.ImplicitConverters._
 
 object DeviceManager {
   final case class RequestTrackDevice(groupId: String, deviceId: String)

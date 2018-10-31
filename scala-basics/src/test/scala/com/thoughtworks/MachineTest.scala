@@ -1,6 +1,6 @@
-package com.thougthworks
+package com.thoughtworks
 
-import com.thougthworks.Machine.simulate
+import com.thoughtworks.Machine.simulate
 import org.scalatest.{FunSuite, Matchers}
 
 class MachineTest extends FunSuite with Matchers {

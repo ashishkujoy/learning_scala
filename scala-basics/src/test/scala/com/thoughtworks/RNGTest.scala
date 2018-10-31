@@ -1,6 +1,6 @@
-package com.thougthworks
+package com.thoughtworks
 
-import com.thougthworks.RNG.{Rand, Simple}
+import com.thoughtworks.RNG.{Rand, Simple}
 import org.scalatest.{FunSuite, Matchers}
 
 class RNGTest extends FunSuite with Matchers {
