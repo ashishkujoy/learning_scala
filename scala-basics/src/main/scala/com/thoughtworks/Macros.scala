@@ -22,14 +22,29 @@ object Macros {
 
   def debug_impl(c: blackbox.Context)(param: c.Expr[Any]): c.Expr[String] = {
     import c.universe._
-    val paramRep     = show(param.tree)
-    val paramRepTree = Literal(Constant(paramRep))
-    val paramRepExpr = c.Expr[String](paramRepTree)
+    val paramRepExpr = toParamRefNameExp(c)(param)
     reify { paramRepExpr.splice + " = " + param.splice }
   }
 
-  def debug2(param: Any*): List[String] = macro impl
+//  def debug2(params: Any*): Map[String, String] = macro impl
+//
+//  def impl(c: blackbox.Context)(params: c.Expr[Any]*): c.Expr[Map[String, String]] = {
+//    import c.universe._
+//    val paramNames       = params.map(param => toParamRefNameExp(c)(param))
+//    val paramNameToValue = Map.empty[String, String]
+//    reify {
+//      paramNames
+//        .zip(params)
+//        .foldLeft(paramNameToValue)(
+//          (nameToValue, nameAndValue) => nameToValue.updated(nameAndValue._1.splice, nameAndValue._2.splice.asInstanceOf[String])
+//        )
+//    }
+//  }
 
-  def impl(c: blackbox.Context)(param: c.Expr[Any]*): c.Expr[List[String]] = ???
-
+  private def toParamRefNameExp(c: blackbox.Context)(param: c.Expr[Any]): c.Expr[String] = {
+    import c.universe._
+    val paramRep     = show(param.tree)
+    val paramRepTree = Literal(Constant(paramRep))
+    c.Expr[String](paramRepTree)
+  }
 }

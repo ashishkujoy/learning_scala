@@ -148,4 +148,16 @@ class ListTest extends BaseTest {
   test("should return empty list on concatenating zero lists") {
     List.concat() shouldBe List.empty
   }
+
+  test("should prepend a given element at the end of list") {
+    val numbers  = List(1, 2, 3, 4)
+    val expected = List(1, 2, 3, 4, 5)
+
+    List.+:(numbers, 5) shouldBe expected
+  }
+
+  test("should prepend a given element in empty list") {
+    List.+:(List.empty,5) shouldBe List(5)
+    Seq(1) :+ 1
+  }
 }

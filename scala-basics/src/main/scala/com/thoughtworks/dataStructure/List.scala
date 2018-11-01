@@ -1,6 +1,7 @@
 package com.thoughtworks.dataStructure
 
 sealed trait List[+A] {
+
   def dropWhile(predicate: A => Boolean): List[A]
 
   def drop(n: Int): List[A]
@@ -27,6 +28,7 @@ case object Nil extends List[Nothing] {
   private def throwException(message: String) = {
     throw new UnsupportedOperationException(message)
   }
+
   override def foldLeft[B](initial: => B)(f: (B, Nothing) => B): B = initial
 
   override def reverse: List[Nothing] = this
@@ -82,6 +84,7 @@ case class Cons[+A](h: A, t: List[A]) extends List[A] {
 
     go(List.empty, this)
   }
+
 }
 
 object List {
@@ -126,6 +129,15 @@ object List {
       case Nil        => l2
       case Cons(h, t) => Cons(h, append(t, l2))
     }
+  }
+
+  def +:[A](list: List[A], a: A): List[A] = {
+    def go(list: List[A], a: A): List[A] = list match {
+      case Nil          => Cons(a, Nil)
+      case Cons(h, Nil) => Cons(h, Cons(a, Nil))
+      case Cons(h, t)   => Cons(h, go(t, a))
+    }
+    go(list, a)
   }
 
 }
