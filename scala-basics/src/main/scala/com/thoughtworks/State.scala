@@ -10,7 +10,7 @@ object RNG {
     def nextInt: (Int, RNG) = {
       val newSeed = (seed * 0x5DEECE66DL + 0xBL) & 0xFFFFFFFFFFFFL
       val nextRNG = Simple(newSeed)
-      val n = (newSeed >>> 16).toInt
+      val n       = (newSeed >>> 16).toInt
       (n, nextRNG)
     }
   }
@@ -23,7 +23,7 @@ object RNG {
 
   def double(rng: RNG): (Double, RNG) = {
     val (int, rng2) = nonNegativeInt(rng)
-    val double = (int / (int + 1)).toDouble
+    val double      = (int / (int + 1)).toDouble
     (double, rng2)
   }
 
@@ -46,19 +46,21 @@ object RNG {
 
   def unit[A](a: A): Rand[A] = rng => (a, rng)
 
-  def map[A, B](stringRand: Rand[A])(f: A => B): Rand[B] = {
-    rng => {
+  def map[A, B](stringRand: Rand[A])(f: A => B): Rand[B] = { rng =>
+    {
       val (a, rng1) = stringRand(rng)
       (f(a), rng1)
     }
   }
 
   def _double(rng: RNG): (Double, RNG) = {
-    map(nonNegativeInt) { a => a.toDouble / (a.toDouble + 1) }(rng)
+    map(nonNegativeInt) { a =>
+      a.toDouble / (a.toDouble + 1)
+    }(rng)
   }
 
-  def map2[A, B, C](ar: Rand[A], br: Rand[B])(f: (A, B) => C): Rand[C] = {
-    rng => {
+  def map2[A, B, C](ar: Rand[A], br: Rand[B])(f: (A, B) => C): Rand[C] = { rng =>
+    {
       val (a, rng1) = ar(rng)
       val (b, rng2) = br(rng1)
       (f(a, b), rng2)
@@ -70,7 +72,6 @@ object RNG {
       map2(rand, rands)(_ :: _)
     }
   }
-
 
 }
 
@@ -98,7 +99,6 @@ object State {
   }
 }
 
-
 sealed trait Input
 
 case object Coin extends Input
@@ -106,12 +106,13 @@ case object Coin extends Input
 case object Turn extends Input
 
 case class Machine(locked: Boolean, candies: Int, coins: Int) {
-  def update(input: Input): Machine = if (candies > 0) {
-    input match {
-      case Coin => if (locked) Machine(false, candies, coins + 1) else this
-      case Turn => if (!locked) Machine(true, candies - 1, coins) else this
-    }
-  } else this
+  def update(input: Input): Machine =
+    if (candies > 0) {
+      input match {
+        case Coin => if (locked) Machine(locked = false, candies, coins + 1) else this
+        case Turn => if (!locked) Machine(locked = true, candies - 1, coins) else this
+      }
+    } else this
 }
 
 object Machine {
