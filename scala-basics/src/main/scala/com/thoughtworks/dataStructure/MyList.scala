@@ -1,29 +1,29 @@
 package com.thoughtworks.dataStructure
 
-sealed trait List[+A] {
+sealed trait MyList[+A] {
 
-  def dropWhile(predicate: A => Boolean): List[A]
+  def dropWhile(predicate: A => Boolean): MyList[A]
 
-  def drop(n: Int): List[A]
+  def drop(n: Int): MyList[A]
 
-  def tail: List[A]
+  def tail: MyList[A]
 
   def head: A
 
   def foldLeft[B](initial: => B)(f: (B, A) => B): B
 
-  def reverse: List[A]
+  def reverse: MyList[A]
 }
 
-case object Nil extends List[Nothing] {
+case object Nil extends MyList[Nothing] {
 
-  override def tail: List[Nothing] = throwException("tail of empty list")
+  override def tail: MyList[Nothing] = throwException("tail of empty list")
 
   override def head: Nothing = throwException("head of empty list")
 
-  override def drop(n: Int): List[Nothing] = this
+  override def drop(n: Int): MyList[Nothing] = this
 
-  override def dropWhile(predicate: Nothing => Boolean): List[Nothing] = this
+  override def dropWhile(predicate: Nothing => Boolean): MyList[Nothing] = this
 
   private def throwException(message: String) = {
     throw new UnsupportedOperationException(message)
@@ -31,16 +31,16 @@ case object Nil extends List[Nothing] {
 
   override def foldLeft[B](initial: => B)(f: (B, Nothing) => B): B = initial
 
-  override def reverse: List[Nothing] = this
+  override def reverse: MyList[Nothing] = this
 }
 
-case class Cons[+A](h: A, t: List[A]) extends List[A] {
-  override def tail: List[A] = t
+case class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
+  override def tail: MyList[A] = t
 
   override def head: A = h
 
-  override def drop(n: Int): List[A] = {
-    def go(cons: List[A], n: Int): List[A] = {
+  override def drop(n: Int): MyList[A] = {
+    def go(cons: MyList[A], n: Int): MyList[A] = {
       if (n > 0) {
         cons match {
           case Cons(_, rt) => go(rt, n - 1)
@@ -52,8 +52,8 @@ case class Cons[+A](h: A, t: List[A]) extends List[A] {
     go(this, n)
   }
 
-  override def dropWhile(predicate: A => Boolean): List[A] = {
-    def go(predicate: A => Boolean, list: List[A]): List[A] = {
+  override def dropWhile(predicate: A => Boolean): MyList[A] = {
+    def go(predicate: A => Boolean, list: MyList[A]): MyList[A] = {
       list match {
         case Nil        => Nil
         case a: Cons[A] => if (predicate(a.head)) go(predicate, a.tail) else a
@@ -64,7 +64,7 @@ case class Cons[+A](h: A, t: List[A]) extends List[A] {
   }
 
   override def foldLeft[B](initial: => B)(f: (B, A) => B): B = {
-    def go(acc: B, list: List[A]): B = {
+    def go(acc: B, list: MyList[A]): B = {
       list match {
         case Cons(head, tail) => go(f(acc, head), tail)
         case _                => acc
@@ -74,32 +74,32 @@ case class Cons[+A](h: A, t: List[A]) extends List[A] {
     go(initial, this)
   }
 
-  override def reverse: List[A] = {
-    def go(reversed: List[A], original: List[A]): List[A] = {
+  override def reverse: MyList[A] = {
+    def go(reversed: MyList[A], original: MyList[A]): MyList[A] = {
       original match {
         case Cons(head, tail) => go(Cons(head, reversed), tail)
         case _                => reversed
       }
     }
 
-    go(List.empty, this)
+    go(MyList.empty, this)
   }
 
 }
 
-object List {
-  def concat[A](lists: List[A]*): List[A] = {
-    def go(concatenatedList: List[A], remainingLists: Seq[List[A]]): List[A] = {
+object MyList {
+  def concat[A](lists: MyList[A]*): MyList[A] = {
+    def go(concatenatedList: MyList[A], remainingLists: Seq[MyList[A]]): MyList[A] = {
       if (remainingLists.isEmpty) concatenatedList
       else go(append(concatenatedList, remainingLists.head), remainingLists.tail)
     }
-    go(List.empty, lists)
+    go(MyList.empty, lists)
   }
 
-  def apply[A](vals: A*): List[A] = {
+  def apply[A](vals: A*): MyList[A] = {
 
     @scala.annotation.tailrec
-    def go(cons: List[A], vals: A*): List[A] = {
+    def go(cons: MyList[A], vals: A*): MyList[A] = {
       if (vals.isEmpty) cons
       else go(Cons(vals.head, cons), vals.tail: _*)
     }
@@ -115,24 +115,24 @@ object List {
     recursiveGo(vals: _*)*/
   }
 
-  def empty[A]: List[A] = Nil
+  def empty[A]: MyList[A] = Nil
 
-  def sum(ints: List[Int], acc: Int = 0): Int = {
+  def sum(ints: MyList[Int], acc: Int = 0): Int = {
     ints match {
       case Nil        => acc
       case Cons(h, t) => sum(t, acc + h)
     }
   }
 
-  def append[A](l1: List[A], l2: List[A]): List[A] = {
+  def append[A](l1: MyList[A], l2: MyList[A]): MyList[A] = {
     l1 match {
       case Nil        => l2
       case Cons(h, t) => Cons(h, append(t, l2))
     }
   }
 
-  def +:[A](list: List[A], a: A): List[A] = {
-    def go(list: List[A], a: A): List[A] = list match {
+  def +:[A](list: MyList[A], a: A): MyList[A] = {
+    def go(list: MyList[A], a: A): MyList[A] = list match {
       case Nil          => Cons(a, Nil)
       case Cons(h, Nil) => Cons(h, Cons(a, Nil))
       case Cons(h, t)   => Cons(h, go(t, a))
