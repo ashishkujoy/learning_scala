@@ -1,5 +1,5 @@
 package com.thoughtworks.dataStructure
-import com.thoughtworks.dataStructure.MyStream.{cons, empty}
+import com.thoughtworks.dataStructure.MyStream.{cons, empty, unfold}
 
 trait MyStream[+A] {
   def uncons: Option[(A, MyStream[A])]
@@ -41,6 +41,37 @@ trait MyStream[+A] {
 
   def filter(predicate: A => Boolean): MyStream[A] = foldRight(empty[A])((a, b) => if (predicate(a)) cons(a, b) else b)
 
+  def concat[B >: A](s: => MyStream[B]): MyStream[B] = foldRight(s)((h, t) => cons(h, t))
+
+  def flatMap[B](f: A => MyStream[B]): MyStream[B] = foldRight(empty[B])((h, t) => f(h).concat(t))
+
+  def zip[B](that: => MyStream[B]): MyStream[(A, B)] =
+    uncons match {
+      case None => empty[(A, B)]
+      case Some((h, t)) =>
+        that.uncons match {
+          case None           => empty[(A, B)]
+          case Some((th, tt)) => cons((h, th), t.zip(tt))
+        }
+    }
+
+  def zipWith[B, C](s2: MyStream[B])(f: (A, B) => C): MyStream[C] = {
+    unfold((uncons, s2.uncons)) {
+      case (Some((h1, t1)), Some((h2, t2))) => Some((f(h1, h2), (t1.uncons, t2.uncons)))
+      case _                                => None
+    }
+  }
+
+  def head: A = uncons match {
+    case None         => throw new Exception("Head of empty MyStream")
+    case Some((h, t)) => h
+  }
+
+  def tail: MyStream[A] = uncons match {
+    case None         => throw new Exception("Tail of empty MyStream")
+    case Some((h, t)) => t
+  }
+
 }
 
 object MyStream {
@@ -57,9 +88,38 @@ object MyStream {
 
   }
 
+  def constant[A](a: A): MyStream[A] = cons(a, constant(a))
+
+  def from(a: Int): MyStream[Int] = cons(a, from(a + 1))
+
+  def fibonacci: MyStream[Int] = {
+    def go(a: Int, b: Int): MyStream[Int] = {
+      val nextTerm = a + b
+      cons(nextTerm, go(b, nextTerm))
+    }
+    apply(0, 1).concat(go(0, 1))
+  }
+
+  def unfold[A, S](z: S)(f: S => Option[(A, S)]): MyStream[A] = f(z) match {
+    case Some((a, s)) => cons(a, unfold(s)(f))
+    case None         => empty[A]
+  }
+
   def apply[A](as: A*): MyStream[A] = {
     if (as.isEmpty) empty[A]
     else cons(as.head, apply(as.tail: _*))
+  }
+
+  def startsWith[A](s1: MyStream[A], s2: MyStream[A]): Boolean = {
+    def go(starts: Boolean, s1: MyStream[A], s2: MyStream[A]): Boolean = {
+      if (starts) (s1.uncons, s2.uncons) match {
+        case (Some((h1, t1)), Some((h2, t2))) => if (h1 != h2) false else go(starts = true, t1, t2)
+        case (None, Some(_))                  => false
+        case _                                => true
+      } else starts
+    }
+
+    go(starts = true, s1, s2)
   }
 
 }
