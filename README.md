@@ -9,3 +9,8 @@ Install the dependencies and run tests.
 ```sh
 $ sbt clean compile test
 ```
+
+### Check code coverage
+```sh
+$ sbt clean compile coverage test coverageReport coverageAggregate
+```
