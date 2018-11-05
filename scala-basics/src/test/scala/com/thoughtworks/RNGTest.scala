@@ -1,10 +1,31 @@
 package com.thoughtworks
 
-import com.thoughtworks.RNG.{Rand, Simple}
+import com.thoughtworks.RNG.{double, Rand, Simple}
 
 class RNGTest extends BaseTest {
 
   private val stringRand: Rand[String] = RNG.unit("string")
+  private val rng: RNG                 = Simple(12)
+
+  test("should give a positive integer") {
+    var randomInts = Set.empty[Int]
+    for (seed <- 1 to 1000 * 1000) {
+      val randomInt = RNG.nonNegativeInt(Simple(seed))._1
+      randomInt > 0 shouldBe true
+      randomInts = randomInts + randomInt
+    }
+    randomInts.size > 1 shouldBe true
+  }
+
+  test("should give a double value between 0 and 1, excluding 1") {
+    var randomDoubles = Set.empty[Double]
+    for (seed <- 1 to 1000 * 1000) {
+      val randomDouble = double(Simple(seed))._1
+      randomDouble >= 0 && randomDouble < 1 shouldBe true
+      randomDoubles = randomDoubles + randomDouble
+    }
+    randomDoubles.size > 1 shouldBe true
+  }
 
   test("should give a list of positive integers of give size") {
     val rng      = Simple(1024)
@@ -37,12 +58,20 @@ class RNGTest extends BaseTest {
     }
   }
 
-  test("should Rand[String] to Rand[Int] for a given string to int transformer") {
+  test("should convert Rand[String] to Rand[Int] for a given string to int transformer") {
     val stringToIntTransformer: String => Int = (s: String) => s.length
 
     val actualRand = RNG.map(stringRand)(stringToIntTransformer)
 
     actualRand.isInstanceOf[Rand[Int]] shouldBe true
+  }
+
+  test("should combine two Rand as per given function") {
+    val intRand = RNG.unit(1)
+    val rand    = RNG.map2(stringRand, intRand)((s, i) => s"$s $i")
+
+    rand.isInstanceOf[Rand[String]] shouldBe true
+    rand(rng)._1 shouldBe "string 1"
   }
 
   test("should convert list of Rand to a Rand of list") {
@@ -54,14 +83,4 @@ class RNGTest extends BaseTest {
     randOfList.isInstanceOf[Rand[List[String]]] shouldBe true
   }
 
-  test("should flatten the result of function returning a Rand[B]") {
-    def stringToIntRand(s: String): Rand[Int] = {
-      val size = s.length
-      RNG.unit(size)
-    }
-
-    val intRand = State.flatMap(stringRand)(stringToIntRand)
-
-    intRand.run.isInstanceOf[Rand[Int]] shouldBe true
-  }
 }

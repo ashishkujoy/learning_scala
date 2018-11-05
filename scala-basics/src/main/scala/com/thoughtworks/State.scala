@@ -23,7 +23,7 @@ object RNG {
 
   def double(rng: RNG): (Double, RNG) = {
     val (int, rng2) = nonNegativeInt(rng)
-    val double      = (int / (int + 1)).toDouble
+    val double      = int.toDouble / (int + 1)
     (double, rng2)
   }
 
@@ -40,31 +40,23 @@ object RNG {
     go(count, List.empty, rng)
   }
 
-  type Rand[A] = RNG => (A, RNG)
+  type Rand[+A] = RNG => (A, RNG)
 
   val int: Rand[Int] = _.nextInt
 
   def unit[A](a: A): Rand[A] = rng => (a, rng)
 
   def map[A, B](stringRand: Rand[A])(f: A => B): Rand[B] = { rng =>
-    {
-      val (a, rng1) = stringRand(rng)
-      (f(a), rng1)
-    }
+    val (a, rng1) = stringRand(rng)
+    (f(a), rng1)
   }
 
-  def _double(rng: RNG): (Double, RNG) = {
-    map(nonNegativeInt) { a =>
-      a.toDouble / (a.toDouble + 1)
-    }(rng)
-  }
+  def _double(rng: RNG): (Double, RNG) = map(nonNegativeInt)(a => a.toDouble / (a.toDouble + 1))(rng)
 
   def map2[A, B, C](ar: Rand[A], br: Rand[B])(f: (A, B) => C): Rand[C] = { rng =>
-    {
-      val (a, rng1) = ar(rng)
-      val (b, rng2) = br(rng1)
-      (f(a, b), rng2)
-    }
+    val (a, rng1) = ar(rng)
+    val (b, rng2) = br(rng1)
+    (f(a, b), rng2)
   }
 
   def sequence[A](fs: List[Rand[A]]): Rand[List[A]] = {
@@ -84,15 +76,12 @@ object State {
   def flatMap[A, B](rand: Rand[A])(f: A => Rand[B]): State[RNG, B] = {
     val rngToTuple: Rand[B] = rng => {
       val (a, rng1) = rand(rng)
-      val (b, rng2) = f(a)(rng1)
-      (b, rng2)
+      f(a)(rng1)
     }
     State(rngToTuple)
   }
 
-  def _map[S, A, B](rand: Rand[A])(f: A => B): State[RNG, B] = {
-    flatMap(rand)(a => unit(f(a)))
-  }
+  def _map[A, B](rand: Rand[A])(f: A => B): State[RNG, B] = flatMap(rand)(a => unit(f(a)))
 
   def _map2[A, B, C](randA: Rand[A], randB: Rand[B])(f: (A, B) => C): State[RNG, C] = {
     flatMap(randA)(a => map(randB)(b => f(a, b)))
