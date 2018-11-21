@@ -7,6 +7,11 @@ object ImplicitConverters {
     }
 
     def swap: Map[B, A] = mapAtoB.map(kv => kv._2 -> kv._1)
-    Seq
+  }
+
+  implicit class Number(a: Int) {
+    def isBetweenExcEnd(start: Int, end: Int): Boolean = {
+      a >= start && a < end
+    }
   }
 }
