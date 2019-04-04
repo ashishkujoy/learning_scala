@@ -1,7 +1,8 @@
-package com.thoughtworks.streams.actors
+package com.thoughtworks.streams.actors.iot
+
 import akka.actor.{Actor, ActorRef, Cancellable, Props, Terminated}
-import com.thoughtworks.streams.actors.Device.RespondTemperature
-import com.thoughtworks.streams.actors.DeviceGroup._
+import com.thoughtworks.streams.actors.iot.Device.RespondTemperature
+import com.thoughtworks.streams.actors.iot.DeviceGroup.{DeviceNotAvailable, RespondAllTemperatures, Temperature, TemperatureNotAvailable, TemperatureReading}
 
 import scala.concurrent.duration.FiniteDuration
 

@@ -1,7 +1,7 @@
-package com.thoughtworks.streams.actors
+package com.thoughtworks.streams.actors.iot
 
 import akka.actor.{Actor, Props}
-import com.thoughtworks.streams.actors.DeviceManager.RequestTrackDevice
+import com.thoughtworks.streams.actors.iot.DeviceManager.RequestTrackDevice
 
 object Device {
   def props(groupId: String, deviceId: String): Props = Props(new Device(groupId, deviceId))

@@ -1,4 +1,5 @@
-package com.thoughtworks.streams.actors
+package com.thoughtworks.streams.actors.iot
+
 import akka.actor.ActorSystem
 import akka.testkit.TestKit
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach, Matchers, WordSpecLike}

@@ -1,8 +1,9 @@
-package com.thoughtworks.streams.actors
+package com.thoughtworks.streams.actors.iot
+
 import akka.actor.{ActorRef, ActorSystem}
 import akka.testkit.TestProbe
-import com.thoughtworks.streams.actors.Device.{ReadTemperature, RecordTemperature, RespondTemperature, TemperatureRecorded}
-import com.thoughtworks.streams.actors.DeviceManager.{DeviceRegistered, RequestTrackDevice}
+import com.thoughtworks.streams.actors.iot.Device.{ReadTemperature, RecordTemperature, RespondTemperature, TemperatureRecorded}
+import com.thoughtworks.streams.actors.iot.DeviceManager.{DeviceRegistered, RequestTrackDevice}
 
 import scala.concurrent.duration._
 

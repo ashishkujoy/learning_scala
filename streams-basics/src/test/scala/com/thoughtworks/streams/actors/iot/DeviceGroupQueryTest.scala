@@ -1,9 +1,10 @@
-package com.thoughtworks.streams.actors
+package com.thoughtworks.streams.actors.iot
+
 import akka.actor.{ActorRef, ActorSystem, PoisonPill}
 import akka.testkit.TestProbe
-import com.thoughtworks.streams.actors.Device.{ReadTemperature, RespondTemperature}
-import com.thoughtworks.streams.actors.DeviceGroup._
-import com.thoughtworks.streams.actors.DeviceGroupQuery.CollectionTimeout
+import com.thoughtworks.streams.actors.iot.Device.{ReadTemperature, RespondTemperature}
+import com.thoughtworks.streams.actors.iot.DeviceGroup.{DeviceNotAvailable, DeviceTimedOut, RespondAllTemperatures, Temperature, TemperatureNotAvailable, TemperatureReading}
+import com.thoughtworks.streams.actors.iot.DeviceGroupQuery.CollectionTimeout
 
 import scala.concurrent.duration._
 

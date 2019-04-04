@@ -1,8 +1,9 @@
-package com.thoughtworks.streams.actors
+package com.thoughtworks.streams.actors.iot
+
 import akka.actor.{Actor, ActorRef, Props, Terminated}
-import com.thoughtworks.streams.actors.DeviceGroup.{ReplyDeviceList, RequestAllTemperatures, RequestDeviceList}
-import com.thoughtworks.streams.actors.DeviceManager.RequestTrackDevice
 import com.thoughtworks.ImplicitConverters._
+import com.thoughtworks.streams.actors.iot.DeviceGroup.{ReplyDeviceList, RequestAllTemperatures, RequestDeviceList}
+import com.thoughtworks.streams.actors.iot.DeviceManager.RequestTrackDevice
 
 import scala.concurrent.duration._
 

@@ -1,7 +1,8 @@
-package com.thoughtworks.streams.actors
+package com.thoughtworks.streams.actors.iot
+
 import akka.actor.{Actor, ActorRef, Props, Terminated}
-import com.thoughtworks.streams.actors.DeviceManager.{ReplyGroupList, RequestGroupList, RequestTrackDevice}
 import com.thoughtworks.ImplicitConverters._
+import com.thoughtworks.streams.actors.iot.DeviceManager.{ReplyGroupList, RequestGroupList, RequestTrackDevice}
 
 object DeviceManager {
   final case class RequestTrackDevice(groupId: String, deviceId: String)

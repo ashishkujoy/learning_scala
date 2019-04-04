@@ -1,7 +1,8 @@
-package com.thoughtworks.streams.actors
+package com.thoughtworks.streams.actors.iot
+
 import akka.actor.{ActorRef, ActorSystem}
 import akka.testkit.TestProbe
-import com.thoughtworks.streams.actors.DeviceManager._
+import com.thoughtworks.streams.actors.iot.DeviceManager.{DeviceRegistered, ReplyGroupList, RequestGroupList, RequestTrackDevice}
 
 import scala.concurrent.duration._
 
