@@ -8,6 +8,7 @@ object Coverage extends AutoPlugin {
   override def projectSettings: Seq[Def.Setting[_]] = Seq(
     coverallsToken := Some(Properties.envOrElse("COVERALLS_REPO_TOKEN", "")),
     coverageMinimum := 20,
-    coverageFailOnMinimum := false
+    coverageFailOnMinimum := false,
+    coverageExcludedPackages := "com.thoughtworks.streams"
   )
 }
