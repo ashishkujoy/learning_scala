@@ -28,10 +28,3 @@ lazy val `streams-basics` = project
   .dependsOn(`scala-basics`)
   .enablePlugins(Coverage)
 
-lazy val `macro-tests` = project
-  .settings(
-    libraryDependencies ++= Dependencies.basic
-  )
-  .dependsOn(`scala-basics`)
-  .dependsOn(`scala-basics` % "test -> test")
-  .enablePlugins(Coverage)
