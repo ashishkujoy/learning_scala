@@ -9,6 +9,6 @@ object Coverage extends AutoPlugin {
     coverallsToken := Some(Properties.envOrElse("COVERALLS_REPO_TOKEN", "")),
     coverageMinimum := 20,
     coverageFailOnMinimum := false,
-    coverageExcludedPackages := "com.thoughtworks.streams"
+    coverageExcludedPackages := "com.thoughtworks.streams.*"
   )
 }
