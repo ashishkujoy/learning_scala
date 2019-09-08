@@ -2,6 +2,7 @@ package com.thoughtworks.streams.playground
 
 import akka.NotUsed
 import akka.actor.{Actor, ActorLogging, ActorRef, Props}
+import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.{Flow, Sink, Source}
 import akka.util.Timeout
 import com.thoughtworks.streams.Implicits
@@ -20,10 +21,14 @@ object ActorIntegration extends Implicits {
   }
   private val simpleActor: ActorRef                         = actorSystem.actorOf(Props(new SimpleActor), "SimpleActor")
   private implicit val timeout: Timeout                     = Timeout(2 seconds)
-  private val actorPoweredFlow: Flow[Int, Int, NotUsed] = Flow[Int].ask[Int](4)(simpleActor)
+  private val actorPoweredFlow: Flow[Int, Int, NotUsed]     = Flow[Int].ask[Int](4)(simpleActor)
   private val source: Source[Int, NotUsed]                  = Source(1 to 10)
+  private val actorPoweredSource: Source[Nothing, ActorRef] = Source.actorRef(5, OverflowStrategy.dropNew)
 
   def main(args: Array[String]): Unit = {
-    source.via(actorPoweredFlow).to(Sink.ignore).run()
+//    source.via(actorPoweredFlow).to(Sink.ignore).run()
+    val materialisedActor = actorPoweredSource.to(Sink.foreach[Int](int => println(s"receive int $int"))).run()
+
+    Seq(1, 2, 3, 4, 5, 56, 7, 8, 9, 0).foreach(materialisedActor ! _)
   }
 }
