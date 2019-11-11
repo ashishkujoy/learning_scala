@@ -1,6 +1,6 @@
 name: Learning Scala
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   build:
